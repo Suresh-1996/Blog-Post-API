@@ -1,11 +1,18 @@
 const express = require("express");
+const http = require("http");
+const socketIo = require("socket.io");
 const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
+const postRoutes = require("./routes/post");
 
 const app = express();
+const server = http.createServer(app);
+
+// Middleware
 app.use(cors());
 app.use(express.json());
+app.use("/uploads", express.static("uploads"));
 
 //Connect to MongoDB
 
@@ -17,11 +24,31 @@ mongoose
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error(err));
 
+// Initialize Socket.IO
+const io = socketIo(server, {
+  cors: {
+    origin: "http://localhost:5174", // Frontend URL
+    methods: ["GET", "POST"],
+  },
+});
+
+// Socket.IO connection
+io.on("connection", (socket) => {
+  console.log("New client connected", socket.id);
+
+  socket.on("disconnect", () => {
+    console.log("Client disconnected", socket.id);
+  });
+});
+
+// io to the app for sharing across the app
+app.set("io", io);
+
 //Routes
 
-const postRoutes = require("./routes/post");
 app.use("/api/posts", postRoutes);
-app.use("/uploads", express.static("uploads"));
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`API running on http://localhost:${PORT}`));
+server.listen(PORT, () =>
+  console.log(`API running on http://localhost:${PORT}`)
+);

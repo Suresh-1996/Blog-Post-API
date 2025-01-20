@@ -1,7 +1,8 @@
 const express = require("express");
 const Post = require("../models/Post");
-const router = express.Router();
 const multer = require("multer");
+
+const router = express.Router();
 
 // Configure Multer for file storage
 const storage = multer.diskStorage({
@@ -22,6 +23,10 @@ router.post("/", upload.single("image"), async (req, res) => {
 
     const newPost = new Post({ title, content, image });
     await newPost.save();
+
+    // Emit real-time update event
+    const io = req.app.get("io");
+    io.emit("newPost");
 
     res.status(201).json(newPost);
   } catch (error) {
