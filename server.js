@@ -27,7 +27,7 @@ mongoose
 // Initialize Socket.IO
 const io = socketIo(server, {
   cors: {
-    origin: "http://localhost:5174", // Frontend URL
+    origin: "http://localhost:5173", // Frontend URL
     methods: ["GET", "POST"],
   },
 });
