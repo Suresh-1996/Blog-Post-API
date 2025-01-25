@@ -5,6 +5,8 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
 const postRoutes = require("./routes/post");
+const adminRoutes = require("./routes/authRoutes");
+const userRoutes = require("./routes/userAuth");
 
 const app = express();
 const server = http.createServer(app);
@@ -47,6 +49,8 @@ app.set("io", io);
 //Routes
 
 app.use("/api/posts", postRoutes);
+app.use("/admin", adminRoutes);
+app.use("/user", userRoutes);
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () =>
