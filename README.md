@@ -46,3 +46,16 @@ A simple, full-stack web application built with React, Tailwind CSS, Node.js,Exp
 - MONGO_URL
 
 ## setup database Schema
+
+# NOTE: Create first admin manually with hash passowrd in database
+- make hashPassowrd.js file and run in node.js
+ ```bash
+  const bcrypt = require("bcrypt");
+
+(async () => {
+  const password = "your password"; // Replace with the desired password
+  const hashedPassword = await bcrypt.hash(password, 10); // Hash the password
+  console.log("Hashed Password:", hashedPassword);
+})();
+```
+
