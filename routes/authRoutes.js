@@ -43,7 +43,7 @@ router.post("/create", protect, adminOnly, async (req, res) => {
       return res.status(400).json({ message: "Admin already exists" });
     }
 
-    const newUser = new User({
+    const newUser = new AdminUser({
       name,
       email,
       password,

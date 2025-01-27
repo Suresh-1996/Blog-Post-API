@@ -26,7 +26,7 @@ router.post("/", upload.single("image"), async (req, res) => {
 
     // Emit real-time update event
     const io = req.app.get("io");
-    io.emit("newPost");
+    io.emit("postUpdate");
 
     res.status(201).json(newPost);
   } catch (error) {
@@ -64,6 +64,9 @@ router.put("/:id", upload.single("image"), async (req, res) => {
     if (!updatedPost) {
       return res.status(404).json({ error: "Post not found" });
     }
+    // Emit real-time update event
+    const io = req.app.get("io");
+    io.emit("postUpdate");
 
     res.status(200).json(updatedPost);
   } catch (error) {
@@ -109,6 +112,10 @@ router.delete("/:id", async (req, res) => {
     if (!deletedPost) {
       return res.status(404).json({ error: "Post not found" });
     }
+    // Emit real-time update event
+    const io = req.app.get("io");
+    io.emit("postUpdate");
+
     res.status(200).json({ message: "Post deleted" });
   } catch (err) {
     res.status(500).json({ error: err.message });
